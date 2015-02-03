@@ -21,25 +21,26 @@ rows = input.count
 end
 
 # Sort so that no adjacent lines have the same colour
-ordered.shuffle!
-randomised = []
+# There must be a better, more functional way to do this
+randomised = ordered.shuffle
+outputlist = []
 previousrow = ['','','']
-while ordered.count != 0
-  nextrow = ordered.find { |row| row[0] != previousrow[0] && row[1] != previousrow[1] && row[2] != previousrow[2]}
+while randomised.count != 0
+  nextrow = randomised.find { |row| row[0] != previousrow[0] && row[1] != previousrow[1] && row[2] != previousrow[2]}
   if nextrow.nil?
-    nextrow = ordered.first
+    nextrow = randomised.first
   end
   # Store in randomised list
-  randomised << nextrow
+  outputlist << nextrow
   # Remove from the ordered list
-  ordered.delete nextrow
+  randomised.delete nextrow
   # Remember the row for next time around
   previousrow = nextrow
 end
 
 # Save CSV
-CSV.open("output.csv", "w") do |output|
-  randomised.each do |row|
-    output << row
+CSV.open("output.csv", "w") do |csv|
+  outputlist.each do |row|
+    csv << row
   end
 end
