@@ -8,13 +8,30 @@ input = CSV.read('input.csv', headers: true)
 ordered = []
 rows = input.count
 
+# Banned combinations
+def banned?(back, small, big)
+  colours = [back, small, big]
+  # Are any the same?
+  return true if colours.uniq.count != colours.count
+  # Are any in banned combinations?
+  [
+    [9,8,11,10,0,14,12],
+    [12,13,14],
+    [7,8],
+    [3,4],
+    [4,5]
+  ].any? do |arr|
+    # There should be no more than one colour in our array in the exclusion list
+    return true if (arr & colours).count > 1
+  end
+  return false
+end
+
 (0...rows).each do |bigrow|
   (0...rows).each do |smallrow|
     (0...rows).each do |backrow|
-      if backrow != bigrow && backrow != smallrow && bigrow != smallrow
-        if true
-          ordered << [input[backrow]["background"], input[smallrow]["small"], input[bigrow]["big"]]
-        end
+      unless banned?(backrow, smallrow, bigrow)
+        ordered << [input[backrow]["background"], input[smallrow]["small"], input[bigrow]["big"]]
       end
     end
   end
