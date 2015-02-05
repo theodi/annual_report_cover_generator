@@ -17,9 +17,10 @@ def banned?(back, small, big)
   [
     [9,8,11,10,0,14,12],
     [12,13,14],
-    [7,8],
+    [7,8,9],
     [3,4],
-    [4,5]
+    [4,5],
+    [0,1]
   ].any? do |arr|
     # There should be no more than one colour in our array in the exclusion list
     return true if (arr & colours).count > 1
@@ -41,10 +42,13 @@ end
 # There must be a better, more functional way to do this
 randomised = ordered.shuffle
 outputlist = []
-previousrow = ['','','']
+previousrow = [nil,nil,nil]
+# background colour
+bgcol = 0
 while randomised.count != 0
-  nextrow = randomised.find { |row| row[0] != previousrow[0] && row[1] != previousrow[1] && row[2] != previousrow[2]}
+  nextrow = randomised.find { |row| row[0] == input[bgcol]["background"] && row[1] != previousrow[1] && row[2] != previousrow[2]}
   if nextrow.nil?
+    # Just take the next row
     nextrow = randomised.first
   end
   # Store in randomised list
@@ -53,6 +57,8 @@ while randomised.count != 0
   randomised.delete nextrow
   # Remember the row for next time around
   previousrow = nextrow
+  # Next background colour
+  bgcol = (bgcol + 1) % 15
 end
 
 # Save CSV
