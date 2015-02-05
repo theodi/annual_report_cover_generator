@@ -10,9 +10,9 @@ rows = input.count
 
 (0...rows).each do |bigrow|
   (0...rows).each do |smallrow|
-    if smallrow != bigrow
-      (0...rows).each do |backrow|
-        if backrow != bigrow
+    (0...rows).each do |backrow|
+      if backrow != bigrow && backrow != smallrow && bigrow != smallrow
+        if true
           ordered << [input[backrow]["background"], input[smallrow]["small"], input[bigrow]["big"]]
         end
       end
